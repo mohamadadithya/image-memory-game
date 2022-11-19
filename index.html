@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Album</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"></script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .image-card {
+                @apply aspect-[1/1] rounded
+            }
+            .btn-primary {
+                @apply px-10 py-2 rounded-full bg-teal-500 font-semibold text-white hover:shadow-lg
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container max-w-4xl mx-auto px-5 grid place-items-center h-screen" x-data="game">
+        <div>
+            <div class="text-center mb-6">
+                <h1 class="font-bold text-4xl mb-5" x-data="{ title: 'Guess The Album' }" x-text="title"></h1>
+                <div class="flex text-2xl mb-8 justify-center items-center">
+                    <p>Score: <span x-text="Math.floor(score >= 98 ? score + 1 : score)"></span></p>
+                    <p class="mx-5" x-show="isStarted">&bullet;</p>
+                    <p x-show="isStarted" x-text="`${seconds == 60 ? '01' : '00'}:${seconds == 60 ? '00' : seconds.toLocaleString('id-ID', { minimumIntegerDigits: 2 })}`"></p>
+                </div>
+                <button @click="start()" x-show="!isStarted" type="button"
+                    class="btn-primary">Start</button>
+                <button class="btn-primary" @click="resetGame()" x-show="isEnded">Repeat</button>
+            </div>
+            <div class="grid grid-cols-3 gap-2 md:grid-cols-4 md:gap-4 p-2 content-center">
+                <template x-for="card in cards">
+                    <div class="aspect-[1/1]"
+                        :class="[`${card.isCleared ? 'shadow-none cursor-default' : 'shadow-lg'}`, isStarted && !isEnded ? 'transition-all hover:scale-95 duration-300 cursor-pointer' : '']">
+                        <img draggable="false" src="./assets/img/default.webp"
+                            :src="`./assets/img/${card.isFlipped ? card.key : 'default'}.jpeg`" @click="flipCard(card)"
+                            x-show="!card.isCleared" class="image-card" :class="card.animated"></div>
+                    </div>
+                </template>
+            </div>
+            <footer class="text-center mt-10 text-sm text-gray-500">
+                <p>&copy; 2022 <a href="https://www.m-adithya.my.id">Mohamad Adithya</a></p>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="./assets/js/countdown.min.js"></script>
+    <script src="./assets/js/moment.min.js"></script>
+    <script src="./assets/js/app.js"></script>
+</body>
+
+</html>
